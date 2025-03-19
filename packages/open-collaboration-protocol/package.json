@@ -43,7 +43,10 @@
     "url": "https://www.typefox.io/"
   },
   "volta": {
-    "node": "18.20.3",
-    "npm": "10.7.0"
+    "node": "22.14.0",
+    "npm": "10.9.2"
+  },
+  "scripts": {
+    "build": "echo 'open-collaboration-protocol: Nothing extra to build.'"
   }
 }
