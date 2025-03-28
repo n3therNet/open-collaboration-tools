@@ -35,11 +35,13 @@ export interface CryptoLib {
 export type CryptoModule = typeof self.crypto | typeof import('node:crypto').webcrypto;
 
 export function setCryptoModule(module: CryptoModule): void {
-    (global as any)[Crypto] = module;
+    // Use globalThis instead of global to get cross-platform compatibility
+    // global is node specific
+    (globalThis as any)[Crypto] = module;
 }
 
 export function getCryptoLib(): CryptoLib {
-    const cryptoModule = (global as any)[Crypto] as CryptoModule;
+    const cryptoModule = (globalThis as any)[Crypto] as CryptoModule;
     return fromCryptoModule(cryptoModule);
 }
 
