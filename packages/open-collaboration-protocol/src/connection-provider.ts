@@ -21,7 +21,16 @@ export interface ConnectionProviderOptions {
     client?: string;
     protocolVersion?: string;
     fetch: Fetch;
-    authenticationHandler: (token: string, authenticationMetadata: types.AuthMetadata) => void;
+    /**
+     * Client specific handler function to handle authentication.
+     *
+     * @param token The token supplied by the server to identify the authentication process.
+     * @param authenticationMetadata The authentication metadata supplied by the server.
+     * @returns Whether or not the authentication was successfully started.
+     * `false` can be returned in case the browser fails to open the URL or the user does not supply a user name.
+     * In that case the authentication process will be cancelled.
+     */
+    authenticationHandler: (token: string, authenticationMetadata: types.AuthMetadata) => Promise<boolean>;
     transports: MessageTransportProvider[];
 }
 
@@ -114,13 +123,24 @@ export class ConnectionProvider {
             throw new Error('Invalid login response');
         }
         const confirmToken = loginBody.pollToken;
-        const url = loginBody.authMetadata.loginPageUrl;
+        const url = loginBody.auth.loginPageUrl;
         const fullUrl = url?.startsWith('/') ? this.getUrl(url) : url;
+        const authController = new AbortController();
+        const abortSignal = this.mergeAbortSignals(options.abortSignal, authController.signal);
         this.options.authenticationHandler(confirmToken, {
-            ...loginBody.authMetadata,
+            ...loginBody.auth,
             loginPageUrl: fullUrl,
+        }).then(success => {
+            if (!success) {
+                // If we failed to run the authentication process, abort the polling
+                // This could be due to failing to open the URL or invalid login data
+                authController.abort();
+            }
+        }, () => authController.abort());
+        const authToken = await this.pollLogin(confirmToken, {
+            ...options,
+            abortSignal
         });
-        const authToken = await this.pollLogin(confirmToken, options);
         this.userAuthToken = authToken;
         return authToken;
     }
@@ -349,5 +369,21 @@ export class ConnectionProvider {
             }
         }
         return -1;
+    }
+
+    private mergeAbortSignals(...signals: (AbortSignal | undefined)[]): AbortSignal {
+        const controller = new AbortController();
+        for (const signal of signals) {
+            if (signal) {
+                if (signal.aborted) {
+                    // If already aborted, just return that signal
+                    return signal;
+                }
+                signal.addEventListener('abort', () => {
+                    controller.abort();
+                });
+            }
+        }
+        return controller.signal;
     }
 }
