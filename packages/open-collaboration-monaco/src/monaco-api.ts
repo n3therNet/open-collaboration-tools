@@ -36,6 +36,7 @@ export type UserData = {me: types.Peer, others: OtherUserData[]};
 export type MonacoCollabApi = {
     createRoom: () => Promise<string | undefined>
     joinRoom: (roomToken: string) => Promise<string | undefined>
+    leaveRoom: () => void
     login: () => Promise<string | undefined>
     logout: () => Promise<void | undefined>
     isLoggedIn: () => Promise<boolean>
@@ -43,6 +44,7 @@ export type MonacoCollabApi = {
     getUserData: () => Promise<UserData | undefined>
     onUsersChanged: (evt: UsersChangeEvent) => void
     onFileNameChange: (callback: FileNameChangeEvent) => void
+    getCurrentConnection: () => types.ProtocolBroadcastConnection | undefined
     followUser: (id?: string) => void
     getFollowedUser: () => string | undefined
     setFileName: (fileName: string) => void
@@ -197,6 +199,7 @@ export function monacoCollab(options: MonacoCollabOptions): MonacoCollabApi {
     return {
         createRoom: doCreateRoom,
         joinRoom: doJoinRoom,
+        leaveRoom: () => instance?.leaveRoom(),
         login: doLogin,
         logout: async () => connectionProvider?.logout(),
         isLoggedIn: isLoggedIn,
@@ -206,6 +209,7 @@ export function monacoCollab(options: MonacoCollabOptions): MonacoCollabApi {
         onFileNameChange: registerFileNameChangeHandler,
         followUser: doFollowUser,
         getFollowedUser: doGetFollowedUser,
+        getCurrentConnection: () => instance?.getCurrentConnection(),
         setFileName: doSetFileName,
         getFileName: doGetFileName,
         getRoomName: doGetRoomName
