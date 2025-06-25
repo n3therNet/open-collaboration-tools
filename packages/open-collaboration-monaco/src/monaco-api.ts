@@ -49,7 +49,8 @@ export type MonacoCollabApi = {
     getFollowedUser: () => string | undefined
     setFileName: (fileName: string) => void
     getFileName: () => string | undefined
-    getRoomName: () => string | undefined
+    setWorkspaceName: (workspaceName: string) => void
+    getWorkspaceName: () => string | undefined
 }
 
 export function monacoCollab(options: MonacoCollabOptions): MonacoCollabApi {
@@ -160,9 +161,9 @@ export function monacoCollab(options: MonacoCollabOptions): MonacoCollabApi {
         }
     };
 
-    const doGetRoomName = () => {
+    const doGetWorkspaceName = () => {
         if (instance) {
-            return instance.roomName;
+            return instance.workspaceName;
         }
         return undefined;
     };
@@ -177,6 +178,12 @@ export function monacoCollab(options: MonacoCollabOptions): MonacoCollabApi {
     const registerFileNameChangeHandler = (callback: FileNameChangeEvent) => {
         if (instance) {
             instance.onFileNameChange(callback);
+        }
+    };
+
+    const doSetWorkspaceName = (workspaceName: string) => {
+        if (instance) {
+            instance.workspaceName = workspaceName;
         }
     };
 
@@ -212,7 +219,8 @@ export function monacoCollab(options: MonacoCollabOptions): MonacoCollabApi {
         getCurrentConnection: () => instance?.getCurrentConnection(),
         setFileName: doSetFileName,
         getFileName: doGetFileName,
-        getRoomName: doGetRoomName
+        getWorkspaceName: doGetWorkspaceName,
+        setWorkspaceName: doSetWorkspaceName
     };
 
 }

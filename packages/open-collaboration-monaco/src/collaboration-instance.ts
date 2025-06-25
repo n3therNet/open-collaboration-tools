@@ -50,7 +50,7 @@ export class CollaborationInstance implements Disposable {
     protected _following?: string;
     protected _fileName: string;
     protected previousFileName?: string;
-    protected _roomName: string;
+    protected _workspaceName: string;
 
     protected connection: ProtocolBroadcastConnection;
 
@@ -82,8 +82,12 @@ export class CollaborationInstance implements Disposable {
         return this._fileName;
     }
 
-    get roomName(): string {
-        return this._roomName;
+    get workspaceName(): string {
+        return this._workspaceName;
+    }
+
+    set workspaceName(_workspaceName: string) {
+        this._workspaceName = _workspaceName;
     }
 
     /**
@@ -110,7 +114,7 @@ export class CollaborationInstance implements Disposable {
         this.yjsProvider.connect();
 
         this._fileName = 'myFile.txt';
-        this._roomName = this.roomId;
+        this._workspaceName = this.roomId;
 
         this.setupConnectionHandlers();
         this.setupFileSystemHandlers();
@@ -122,8 +126,8 @@ export class CollaborationInstance implements Disposable {
             const result = await this.options.callbacks.onUserRequestsAccess(user);
             return result ? {
                 workspace: {
-                    name: this.roomName,
-                    folders: [this.roomName]
+                    name: this.workspaceName,
+                    folders: [this.workspaceName]
                 }
             } : undefined;
         });
@@ -137,8 +141,8 @@ export class CollaborationInstance implements Disposable {
                 capabilities: {},
                 permissions: { readonly: false },
                 workspace: {
-                    name: this.roomName,
-                    folders: [this.roomName]
+                    name: this.workspaceName,
+                    folders: [this.workspaceName]
                 }
             };
             this.connection.peer.init(peer.id, initData);
@@ -183,7 +187,7 @@ export class CollaborationInstance implements Disposable {
 
     private async handleStat(_: unknown, path: string): Promise<{ type: types.FileType; mtime: number; ctime: number; size: number }> {
         return {
-            type: path === this.roomName ? types.FileType.Directory : types.FileType.File,
+            type: path === this.workspaceName ? types.FileType.Directory : types.FileType.File,
             mtime: 0,
             ctime: 0,
             size: 0
@@ -400,7 +404,7 @@ export class CollaborationInstance implements Disposable {
     }
 
     protected async registerTextDocument(document: monaco.editor.ITextModel): Promise<void> {
-        const uri = this.getResourceUri(`${this._roomName}/${this._fileName}`);
+        const uri = this.getResourceUri(`${this._workspaceName}/${this._fileName}`);
         const path = this.getProtocolPath(uri);
         if (!this.currentPath || this.currentPath !== path) {
             this.currentPath = path;
