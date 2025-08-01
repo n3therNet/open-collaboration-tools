@@ -18,6 +18,7 @@ import { AuthEndpoint } from './auth-endpoints/auth-endpoint.js';
 import { GitHubOAuthEndpoint, GoogleOAuthEndpoint  } from './auth-endpoints/oauth-endpoint.js';
 import { Configuration, DefaultConfiguration } from './utils/configuration.js';
 import { PeerManager } from './peer-manager.js';
+import { AuthentikOAuthEndpoint } from './auth-endpoints/authentik-endpoint.js';
 import { KeycloakOAuthEndpoint } from './auth-endpoints/keycloak-endpoint.js';
 
 /**
