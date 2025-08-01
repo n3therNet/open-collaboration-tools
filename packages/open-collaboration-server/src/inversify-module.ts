@@ -49,6 +49,8 @@ export default new ContainerModule(bind => {
     bind(AuthEndpoint).toService(GitHubOAuthEndpoint);
     bind(GoogleOAuthEndpoint).toSelf().inSingletonScope();
     bind(AuthEndpoint).toService(GoogleOAuthEndpoint);
+    bind(AuthentikOAuthEndpoint).toSelf().inSingletonScope();
+    bind(AuthEndpoint).toService(AuthentikOAuthEndpoint);
     bind(KeycloakOAuthEndpoint).toSelf().inSingletonScope();
     bind(AuthEndpoint).toService(KeycloakOAuthEndpoint);
 });
