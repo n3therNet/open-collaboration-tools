@@ -28,7 +28,7 @@ export class AuthentikOAuthEndpoint extends OAuthEndpoint {
 
     @postConstruct()
     init() {
-        this.host = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_HOST');
+        this.host = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_URL');
         this.clientID = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTID');
         this.clientSecret = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTSECRET');
         this.userNameClaim = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_USERNAMECLAIM');
