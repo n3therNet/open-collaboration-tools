@@ -33,6 +33,8 @@ export class AuthentikOAuthEndpoint extends OAuthEndpoint {
         this.clientSecret = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTSECRET');
         this.userNameClaim = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_USERNAMECLAIM');
         this.label = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTLABEL') ?? 'Authentik';
+
+        super.initialize();
     }
 
     getProtocolProvider(): AuthProvider {
