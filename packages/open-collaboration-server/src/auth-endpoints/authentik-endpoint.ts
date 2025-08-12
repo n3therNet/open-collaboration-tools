@@ -35,7 +35,7 @@ export class AuthentikOAuthEndpoint extends OAuthEndpoint {
         this.label = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTLABEL') ?? 'Authentik';
 
         super.initialize();
-        this.baseURL = "https://oct.e0.n3ther.net:8100";
+        this.baseURL = "https://oct.e0.n3ther.net";
     }
 
     getProtocolProvider(): AuthProvider {
