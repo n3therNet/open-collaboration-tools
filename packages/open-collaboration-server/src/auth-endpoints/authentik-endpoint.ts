@@ -28,11 +28,11 @@ export class AuthentikOAuthEndpoint extends OAuthEndpoint {
 
     @postConstruct()
     init() {
-        this.host = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_URL');
-        this.clientID = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTID');
-        this.clientSecret = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTSECRET');
-        this.userNameClaim = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_USERNAMECLAIM');
-        this.label = this.configuration.getValue('OCT_OAUTH_AUTHENTIK_CLIENTLABEL') ?? 'Authentik';
+        this.host = this.configuration.getValue('oct-oauth-authentik-url');
+        this.clientID = this.configuration.getValue('oct-oauth-authentik-clientid');
+        this.clientSecret = this.configuration.getValue('oct-oauth-authentik-clientsecret');
+        this.userNameClaim = this.configuration.getValue('oct-oauth-authentik-usernameclaim');
+        this.label = this.configuration.getValue('oct-oauth-authentik-clientlabel') ?? 'Authentik';
 
         super.initialize();
     }
